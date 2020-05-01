@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+        db_container:
+                image: mysql:5.7
+                volumes:
+                        - mysql_storage:/var/lib/mysql
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: mysqlrootpass
+                        MYSQL_USER: aman_saini
+                        MYSQL_PASSWORD: saini_pass
+                        MYSQL_DATABASE: saini_db
+
+        wp_container:
+                image: wordpress:5.1.1-php7.3-apache
+                restart: always
+                depends_on:
+                        - db_container
+                ports:
+                        - 8484:80
+                environment:
+                        WORDPRESS_DB_HOST: db_container 
+                        WORDPRESS_DB_USER: aman_saini 
+                        WORDPRESS_DB_PASSWORD: saini_pass 
+                        WORDPRESS_DB_NAME: saini_db
+                volumes:
+                        - wp_storage:/var/www/html
+
+volumes:
+        wp_storage:
+        mysql_storage:
